@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html 
+    lang="pt-br"
+    xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="'Index'"
+    th:with="currentPage='contrato'">
+    
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <title></title>
+</head>
+
+<body>
+	<div class="container" layout:fragment="conteudo">
+		<h1 class="text-center">Pesquisar Contrato</h1>
+
+		<div aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/}">Dashboard</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Contratos</li>
+				<li class="breadcrumb-item"><a th:href="@{/contratos/novo}">Novo</a></li>
+			</ol>
+		</div>
+
+		<form class="row" method="GET" th:object="${contratoFilter}" th:action="@{/contratos}">
+			<div class="col-sm-8"></div>	
+					
+			<div class="col-sm-4">
+				<div class="input-group mb-3">						 
+					<input id="numero" th:field="*{numero}" type="text" class="form-control" placeholder="Pesquisar...">
+					 
+					<div class="input-group-append">
+						<button id="btnBuscar" class="btn btn-primary" type="submit">
+							<i class="fas fa-search"></i>
+						</button> 
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<div class="row">
+			<div class="col-sm-12 table-responsive">
+				<table class="table table-hover thead-dark table-bordered table-striped">
+					<thead>
+						<tr>
+						<th style="width: 10%;">Código</th>
+						<th>Numero</th>
+						<th style="width: 10%;" colspan="2" class="text-center">Ações</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="contrato : ${pagina.content}">
+							<td class="text-center" th:text="${contrato.codigo}"></td>
+							<td th:text="${contrato.numero}"></td>
+							
+							<td class="text-center">
+								<div th:if="${#strings.contains(#authentication.principal.authorities, 'ADMINISTRADOR')}">
+									<a th:href="@{|/contratos/${contrato.codigo}|}" data-toggle="tooltip" title="EDITAR" data-position="top">
+										<i class="fas fa-pencil-alt"></i>
+									</a>
+								</div>
+							</td>
+							<td class="text-center" data-toggle="tooltip" title="EXCLUIR" data-position="top"> 
+								<div th:if="${#strings.contains(#authentication.principal.authorities, 'ADMINISTRADOR')}">
+									<a href="javascript:;" class="js-btn-excluir" th:url="@{|/contratos/${contrato.codigo}|}">
+										<i class="fas fa-trash-alt text-danger"></i>
+									</a>
+								</div>
+							</td>
+						</tr>
+						
+						<tr th:if="${#lists.isEmpty(pagina.content)}">
+							<td colspan="5" class="text-center">Nenhuma informação encontrado!</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<th:block th:include="componentes/Pagination"></th:block>
+		</div>
+	</div>
+	
+  	<!-- JavaScript -->
+  	<th:block layout:fragment="javascripts">
+  	<script th:src="@{vendor/sweetalert/sweetalert.min.js}"></script>
+  	<script th:src="@{js/pdv.dialogo-excluir.js}"></script>
+  	</th:block>
+  	
+  	<script>
+	$(document).ready(function(){
+	  $('[data-toggle="tooltip"]').tooltip();
+	});
+	</script>
+</body>
+</html>

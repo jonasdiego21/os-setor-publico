@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html 
+    lang="pt-br"
+    xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="'Index'"
+    th:with="currentPage='execucaocontrato'">
+    
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <title></title>
+</head>
+
+<body>
+	<section class="container" layout:fragment="conteudo">
+
+		<h1 class="text-center" th:if="${execucaoContrato.novo}">Execução de Contrato</h1>
+		<h1 class="text-center" th:unless="${execucaoContrato.novo}" th:text="|Edição de ${execucaoContrato.nome}|">Editar Execução de Contrato</h1>
+		
+		<hr />
+
+		<div aria-label="breadcrumb">
+			<ol class="breadcrumb">
+		    	<li class="breadcrumb-item"><a th:href="@{/}">Dashboard</a></li>
+		    	<li class="breadcrumb-item"><a th:href="@{/execucaocontratos}">Execução de Contratos</a></li>
+		    	<li class="breadcrumb-item active" aria-current="page">Novo</li>
+			</ol>
+		</div>
+		
+		<form method="POST" class="input-form" th:object="${execucaoContrato}" th:action="@{/execucaocontratos}">	
+
+			<input type="hidden" th:field="*{codigo}" />	
+			
+			<!-- error -->
+			<th:block th:include="messages/ErrorMessage"></th:block>
+			
+			<!-- success -->
+			<th:block th:include="messages/SuccessMessage"></th:block>
+			
+			<div class="row">
+				<div class="form-group col-sm-12">
+					<label class="form-control-label" for="fornecedor"><span class="text-danger">*</span>Fornecedor</label>
+					<input type="text" th:field="*{fornecedor}" class="form-control" id="fornecedor" th:errorclass="is-invalid" autocomplete="off">
+				</div>
+			</div>		
+			
+			<hr />
+			
+			<div class="row mb-3">
+				<div class="col-sm-12 text-right">
+					<a th:href="@{/}" class="btn btn-danger"><i class="fas fa-ban"></i> Cancelar</a>
+					<button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
+				</div>
+			</div>
+		</form>
+	</section>
+</body>
+</html>

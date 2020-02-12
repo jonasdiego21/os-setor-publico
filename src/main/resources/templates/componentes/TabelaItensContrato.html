@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html 
+	lang="pt-br"
+	xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org">
+
+	<tbody th:each="item : ${itens}">
+		<tr>
+			<td>[[${item.especificacao}]]</td>
+			<td>[[${item.marca}]]</td>
+			<td>[[${item.unidadeMedida}]]</td>
+			<td>[[${item.quantidade}]]</td>
+			<td>[[${{item.valorUnitario}}]]</td>
+			<td>[[${{item.valorTotal}}]]</td>
+			<td class="text-center">
+				<a id="btnRemover" th:data-index="${itemStat.count()}">
+					<i class="fas fa-trash-alt text-danger"></i>
+				</a>
+			</td>
+		</tr>
+	</tbody>
+
+</html>

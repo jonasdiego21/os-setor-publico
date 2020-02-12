@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html 
+    lang="pt-br"
+    xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="'Index'"
+    th:with="currentPage='contrato'">
+    
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <title></title>
+</head>
+
+<body>
+	<section class="container" layout:fragment="conteudo">
+
+		<h1 class="text-center" th:if="${contrato.novo}">Cadastrar Contrato</h1>
+		<h1 class="text-center" th:unless="${contrato.novo}" th:text="|Edição de ${contrato.nome}|">Editar Contrato</h1>
+		
+		<hr />
+
+		<div aria-label="breadcrumb">
+			<ol class="breadcrumb">
+		    	<li class="breadcrumb-item"><a th:href="@{/}">Dashboard</a></li>
+		    	<li class="breadcrumb-item"><a th:href="@{/contratos}">Contratos</a></li>
+		    	<li class="breadcrumb-item active" aria-current="page">Novo</li>
+			</ol>
+		</div>
+		
+		<form method="POST" class="input-form" th:object="${contrato}" th:action="@{/contratos}">	
+
+			<input type="hidden" th:field="*{codigo}" />	
+			
+			<!-- error -->
+			<th:block th:include="messages/ErrorMessage"></th:block>
+			
+			<!-- success -->
+			<th:block th:include="messages/SuccessMessage"></th:block>
+			
+			<div class="row">
+				<div class="form-group col-sm-3">
+					<label class="form-control-label" for="numero"><span class="text-danger">*</span>Numero</label>
+					<input type="text" th:field="*{numero}" class="form-control" id="numero" th:errorclass="is-invalid" autocomplete="off">
+				</div>
+				
+				<div class="form-group col-sm-2 date">
+					<label class="form-control-label" for="dataInicio"><span class="text-danger">*</span>Data Inicio</label>
+					<input type="text" th:field="*{dataInicio}" class="form-control datepicker data-mask" id="dataInicio" th:errorclass="is-invalid" autocomplete="off">
+				</div>
+				
+				<div class="form-group col-sm-2 date">
+					<label class="form-control-label" for="dataTermino"><span class="text-danger">*</span>Data Término</label>
+					<input type="text" th:field="*{dataTermino}" class="form-control datepicker data-mask" id="dataTermino" th:errorclass="is-invalid" autocomplete="off">
+				</div>
+				
+				<div class="form-group col-sm-1">
+					<label class="form-control-label" for="prazo">Prazo</label>
+					<input readonly th:text="${prazo}" type="text" class="form-control" id="prazo" autocomplete="off">
+				</div>
+				
+				<div class="form-group col-sm-2">
+					<label class="form-control-label" for="numeroLicitacao"><span class="text-danger">*</span>Numero Licitação</label>
+					<input type="text" th:field="*{numeroLicitacao}" class="form-control" id="numeroLicitacao" th:errorclass="is-invalid" autocomplete="off">
+				</div>
+				
+				<div class="form-group col-sm-2">
+					<label class="form-control-label" for="valorContrato"><span class="text-danger">*</span>Valor do contrato</label>
+					<input type="text" th:field="*{valorContrato}" class="form-control moeda-mask" id="valorContrato" th:errorclass="is-invalid" autocomplete="off">
+				</div>
+			</div>	
+			
+			<div class="row">
+				<div class="form-group col-sm-4">
+					<label class="form-control-label" for="secretaria"><span class="text-danger">*</span>Secretaria</label>
+					
+					<select th:field="*{secretaria}" class="form-control" id="secretaria" th:errorclass="is-invalid">
+						<option value="">Selecione a secretaria</option>
+						<option th:each="secretaria : ${secretarias}" th:value="${secretaria.codigo}" th:text="${secretaria.nome}"></option>
+					</select>
+				</div>
+				
+				<div class="form-group col-sm-4">
+					<label class="form-control-label" for="fornecedor"><span class="text-danger">*</span>Fornecedor</label>
+					
+					<select th:field="*{fornecedor}" class="form-control" id="fornecedor" th:errorclass="is-invalid">
+						<option value="">Selecione o fornecedor</option>
+						<option th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.codigo}" th:text="${fornecedor.nome}"></option>
+					</select>
+				</div>
+				
+				<div class="form-group col-sm-4">
+					<label class="form-control-label" for="tipoMaterial"><span class="text-danger">*</span>Tipo de Material</label>
+					
+					<select th:field="*{tipoMaterial}" class="form-control" id="tipoMaterial" th:errorclass="is-invalid">
+						<option value="">Selecione o tipo de material</option>
+						<option th:each="tipoMaterial : ${materiais}" th:value="${tipoMaterial}" th:text="${tipoMaterial.descricao}"></option>
+					</select>
+				</div>
+			</div>	
+			
+			<div class="row">				
+				<div class="form-group col-sm-12">
+					<label class="form-control-label" for="objeto"><span class="text-danger">*</span>Objeto do contrato (Especificação)</label>
+					<textarea rows="5" cols="5" th:field="*{objeto}" class="form-control" id="objeto" th:errorclass="is-invalid"></textarea>
+				</div>
+			</div>
+			
+			<div class="row">				
+				<div class="form-group col-sm-12 table-responsive">
+					<table class="table table-bordered">
+						<thead class="bg-primary text-white">
+							<tr>
+								<th>
+									<a href="#itensContratoCollapse" class="btn" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="itensContratoCollapse">
+										<i class="fas fa-box-open text-white"></i>
+									</a>
+									ITENS DO CONTRATO
+								</th>
+							</tr>
+						</thead>
+						
+						<tbody class="collapse multi-collapse show" id="itensContratoCollapse">
+							<tr>
+								<td>
+									<div class="row">
+										<div class="form-group col-sm-8">
+											<label class="form-control-label" for="especificacao"><span class="text-danger">*</span>Especificação do item</label>
+											<input type="text" class="form-control" id="especificacao" autocomplete="off">
+										</div>
+										
+										<div class="form-group col-sm-4">
+											<label class="form-control-label" for="marca"><span class="text-danger">*</span>Marca</label>
+											<input type="text" class="form-control" id="marca" autocomplete="off">
+										</div>
+									</div>
+										
+									<div class="row">
+										<div class="form-group col-sm-3">
+											<label class="form-control-label" for="unidade"><span class="text-danger">*</span>Unidade</label>
+					
+											<select class="form-control" id="unidadeMedida">
+												<option value="">Selecione a unidade/medida</option>
+												<option th:each="medida : ${medidas}" th:value="${medida}" th:text="${medida.descricao}"></option>
+											</select>
+										</div>
+										
+										<div class="form-group col-sm-3">
+											<label class="form-control-label" for="quantidade"><span class="text-danger">*</span>Qtde</label>
+											<input type="Number" class="form-control" id="quantidade" autocomplete="off">
+										</div>
+										
+										<div class="form-group col-sm-3">
+											<label class="form-control-label" for="valorUnitario"><span class="text-danger">*</span>Vl. Unit.</label>
+											<input type="text" class="form-control moeda-mask" id="valorUnitario" autocomplete="off">
+										</div>
+										
+										<div class="form-group col-sm-3">
+											<label class="form-control-label" for="total">Total</label>
+											<input readonly type="text" class="form-control moeda-mask" id="total" autocomplete="off">
+										</div>
+									</div>
+									
+									<hr />
+			
+									<div class="row mb-3">
+										<div class="col-sm-12 text-right">
+											<button id="btnImportarExcel" class="btn btn-success"><i class="fas fa-file-excel"></i> Importar do Excel</button>
+											<button id="btnImportWord" class="btn btn-info"><i class="fas fa-file-word"></i> Importar do Processo</button>
+											<button id="btnAdicionar" class="btn btn-primary"><i class="fas fa-plus"></i> Adicionar Item</button>
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="col-sm-12">
+											<table class="table table-hover thead-dark table-bordered table-striped">
+												<thead>
+													<tr>
+														<th style="width: 25%;">Especificação do item</th>
+														<th>Marca</th>
+														<th>Unidade</th>
+														<th>Qtde</th>
+														<th>Vl. Unit.</th>
+														<th>Total</th>
+														<th style="width: 5%;" class="text-center"><i class="fas fa-trash-alt text-secondary"></i></th>
+													</tr>
+												</thead>
+												
+												<tbody id="itensContratos">
+													<tr th:if="${#lists.isEmpty(itens)}">
+														<td colspan="7" class="text-center">Nenhum item adicionado!</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			
+			<hr />
+			
+			<div class="row mb-3">
+				<div class="col-sm-12 text-right">
+					<a th:href="@{/}" class="btn btn-danger"><i class="fas fa-ban"></i> Cancelar</a>
+					<button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
+				</div>
+			</div>
+		</form>
+	</section>
+	
+	<!-- JavaScript -->
+  	<th:block layout:fragment="javascripts">
+  	<script th:src="@{/vendor/mask/jquery-maskmoney.js}"></script>
+  	<script th:src="@{/vendor/mask/jquery.mask.min.js}"></script>
+  	<script th:src="@{/js/moment.js}"></script>
+  	<script th:src="@{/js/pdv.mascaras-campos.js}"></script>
+  	<script th:src="@{/js/pdv.calcular-dias.js}"></script>
+  	<script th:src="@{/js/pdv.add-itens-contrato.js}"></script>
+  	</th:block>
+</body>
+</html>

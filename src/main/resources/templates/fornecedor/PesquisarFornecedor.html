@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html 
+    lang="pt-br"
+    xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="'Index'"
+    th:with="currentPage='fornecedor'">
+    
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <title></title>
+</head>
+
+<body>
+	<div class="container" layout:fragment="conteudo">
+		<h1 class="text-center">Pesquisar Fornecedor</h1>
+
+		<div aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/}">Dashboard</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Fornecedores</li>
+				<li class="breadcrumb-item"><a th:href="@{/fornecedores/novo}">Novo</a></li>
+			</ol>
+		</div>
+
+		<form method="GET" th:object="${fornecedorFilter}" th:action="@{/fornecedores}">
+			<div class="row">
+				<div class="form-group col-sm-4">
+					<label>Tipo Pessoa</label>					
+					
+					<div class="row tipo-pessoa">
+						<div class="col-sm-4">
+						    <input value="" type="radio" id="TODOS" name="tipoPessoa" checked>
+						    <label class="form-check-label" for="TODOS">Todos</label>
+						</div>
+						
+						<div class="col-sm-4" th:each="tipo : ${tipoPessoa}">
+						    <input th:value="${tipo}" th:field="*{tipoPessoa}" type="radio" th:id="${tipo.documento}" th:name="${tipo.descricao}">
+						    <label class="form-check-label" th:for="${tipo.documento}" th:text="${tipo.descricao}">******</label>
+						</div>
+					</div>
+				</div>
+				
+				<div class="form-group col-sm-3">
+					<label class="form-control-label" for="cpfOuCnpj">CPF/CNPJ</label>
+					<input type="text" th:field="*{cpfOuCnpj}" class="form-control cpfCnpj-mask" id="cpfOuCnpj" th:errorclass="is-invalid" autocomplete="off">
+				</div>
+				
+				<div class="form-group col-sm-5">
+					<label class="form-control-label" for="nome">Nome Fantasia/Razão Social</label>
+					<input type="text" th:field="*{nome}" class="form-control" id="nome" th:errorclass="is-invalid" autocomplete="off">
+				</div>
+			</div>	
+			
+			<div class="row">
+				<div class="form-group col-sm-6">
+					<label class="form-control-label" for="email">E-mail</label>
+					<input type="email" th:field="*{email}" class="form-control" id="email" th:errorclass="is-invalid" autocomplete="off">
+				</div>
+				
+				<div class="form-group col-sm-3">
+					<label class="form-control-label" for="fixo">Fixo</label>
+					<input type="text" th:field="*{fixo}" class="form-control telefone-mask" id="fixo" th:errorclass="is-invalid" autocomplete="off">
+				</div>
+				
+				<div class="form-group col-sm-3">
+					<label class="form-control-label" for="telefone telefone-mask">Celular</label>
+					<input type="text" th:field="*{telefone}" class="form-control telefone-mask" id="telefone" th:errorclass="is-invalid" autocomplete="off">
+				</div>
+			</div>
+			
+			<hr />
+			
+			<div class="row mb-3">
+				<div class="col-sm-12 text-right">
+					<button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Pesquisar</button>
+				</div>
+			</div>
+		</form>
+
+		<div class="row">
+			<div class="col-sm-12 table-responsive">
+				<table class="table table-hover thead-light table-bordered table-striped">
+					<thead class="thead-dark">
+						<tr>
+							<th style="width: 5%;">Nº</th>
+							<th>Nome</th>
+							<th>E-mail</th>
+							<th class="text-center">Tipo Pessoa</th>
+							<th class="text-center">CPF/CNPJ</th>
+							<th class="text-center">Telefone</th>
+							<th style="width: 10%;" colspan="2" class="text-center">Ações</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="fornecedor : ${pagina.content}">
+							<td class="text-center" th:text="|${fornecedorStat.count}º|"></td>
+							<td th:text="${fornecedor.nome}"></td>
+							<td th:text="${fornecedor.email}"></td>
+							<td class="text-center" th:text="${fornecedor.tipoPessoa.descricao}"></td>
+							<td class="text-center">[[${fornecedor.cpfOuCnpj}]]</td>
+							<td th:text="|${fornecedor.fixo}, ${fornecedor.telefone}|"></td>
+							
+							<td class="text-center">
+								<div th:if="${#strings.contains(#authentication.principal.authorities, 'ADMINISTRADOR')}">
+									<a th:href="@{|/fornecedores/${fornecedor.codigo}|}" data-toggle="tooltip" title="EDITAR" data-position="top">
+										<i class="fas fa-pencil-alt"></i>
+									</a>
+								</div>
+							</td>
+							<td class="text-center" data-toggle="tooltip" title="EXCLUIR" data-position="top"> 
+								<div th:if="${#strings.contains(#authentication.principal.authorities, 'ADMINISTRADOR')}">
+									<a href="javascript:;" class="js-btn-excluir" th:url="@{|/fornecedores/${fornecedor.codigo}|}">
+										<i class="fas fa-trash-alt text-danger"></i>
+									</a>
+								</div>
+							</td>
+						</tr>
+						
+						<tr th:if="${#lists.isEmpty(pagina.content)}">
+							<td colspan="8" class="text-center">Nenhuma informação encontrado!</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<th:block th:include="componentes/Pagination"></th:block>
+		</div>
+	</div>
+	
+  	<!-- JavaScript -->
+  	<th:block layout:fragment="javascripts">
+  	<script th:src="@{/vendor/mask/jquery-maskmoney.js}"></script>
+  	<script th:src="@{/vendor/mask/jquery.mask.min.js}"></script>
+  	<script th:src="@{/js/pdv.mascaras-campos.js}"></script>
+  	<script th:src="@{vendor/sweetalert/sweetalert.min.js}"></script>
+  	<script th:src="@{js/pdv.dialogo-excluir.js}"></script>
+  	</th:block>
+  	
+  	<script>
+	$(document).ready(function(){
+	  $('[data-toggle="tooltip"]').tooltip();
+	});
+	</script>
+</body>
+</html>
