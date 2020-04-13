@@ -10,10 +10,10 @@
 			<td>[[${item.marca}]]</td>
 			<td>[[${item.unidadeMedida}]]</td>
 			<td>[[${item.quantidade}]]</td>
-			<td>[[${{item.valorUnitario}}]]</td>
-			<td>[[${{item.valorTotal}}]]</td>
+			<td>R$ [[${{item.valorUnitario}}]]</td>
+			<td>R$ [[${{item.valorTotal}}]]</td>
 			<td class="text-center">
-				<a id="btnRemover" th:data-index="${itemStat.count()}">
+				<a href="#" id="btnRemover" th:data-index="${itemStat.count}">
 					<i class="fas fa-trash-alt text-danger"></i>
 				</a>
 			</td>

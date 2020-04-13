@@ -44,8 +44,8 @@ public class Constants {
 	
 	public final static String VIEW_ITEM_COMPRA_DIRETA = "componentes/TabelaItensCompraDireta";
 	
-	public final static String VIEW_PESQUISAR_EXECUCAO_CONTRATO = "execucaocontratos/PesquisarExecucaoContrato";
-	public final static String VIEW_EXECUCAO_CONTRATO_NOVO = "execucaocontratos/CadastrarExecucaoContrato";
+	public final static String VIEW_PESQUISAR_EXECUCAO_CONTRATO = "execucaocontrato/PesquisarExecucaoContrato";
+	public final static String VIEW_EXECUCAO_CONTRATO_NOVO = "execucaocontrato/CadastrarExecucaoContrato";
 	public final static String VIEW_EXECUCAO_CONTRATO_REDIRECT = "redirect:/execucaocontratos/novo";
 	
 	public final static String VIEW_PESQUISAR_USUARIO = "usuario/PesquisarUsuario";
@@ -53,4 +53,15 @@ public class Constants {
 	public final static String VIEW_USUARIO_REDIRECT = "redirect:/usuarios/novo";
 	
 	public final static String VIEW_RELATORIOS = "relatorios/EmitirRelatorio";
+	
+	// files messages
+	public final static String VIEW_UPLOAD_FILE = "upload/UploadFile";
+	public final static String ERROR_SAVE_TEMP_FILE = "Error to save temporary file";
+	public final static String ERROR_RECOVERY_TEMP_FILE = "Error to recovery temporary file";
+	public final static String ERROR_RECOVERY_FILE = "Error to recovery file";
+	public final static String ERROR_MOVE_FILE_DEFINITIVE_LOCAL = "Error to move temporary file for definitive local";
+	public final static String CREATE_DIRECTORY_SUCCESS = "Create directory success!";
+	public final static String DEFAULT_DIRECTORY = "Default directory";
+	public final static String TEMP_DIRECTORY = "Temporary directory";
+	public final static String ERROR_CREATE_DIRECTORY_SAVE_FILE = "Error to create directory for saving file";
 }

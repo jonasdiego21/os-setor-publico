@@ -27,19 +27,7 @@
 		</div>
 
 		<form class="row" method="GET" th:object="${execucaoContratoFilter}" th:action="@{/execucaocontratos}">
-			<div class="col-sm-8"></div>	
-					
-			<div class="col-sm-4">
-				<div class="input-group mb-3">						 
-					<input id="nome" th:field="*{nome}" type="text" class="form-control" placeholder="Pesquisar...">
-					 
-					<div class="input-group-append">
-						<button id="btnBuscar" class="btn btn-primary" type="submit">
-							<i class="fas fa-search"></i>
-						</button> 
-					</div>
-				</div>
-			</div>
+			
 		</form>
 
 		<div class="row">
@@ -47,15 +35,25 @@
 				<table class="table table-hover thead-light table-bordered table-striped">
 					<thead class="thead-dark">
 						<tr>
-						<th style="width: 10%;">Código</th>
+						<th style="width: 10%;">#</th>
 						<th>Fornecedor</th>
-						<th style="width: 10%;" colspan="2" class="text-center">Ações</th>
+						<th>Contato</th>
+						<th>Data Exec.</th>
+						<th style="width: 10%;" colspan="3" class="text-center">Ações</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="execucaocontrato : ${pagina.content}">
 							<td class="text-center" th:text="${execucaocontrato.codigo}"></td>
-							<td th:text="${execucaocontrato.nome}"></td>
+							<td th:text="${execucaocontrato.fornecedor.nome}"></td>
+							<td th:text="|${execucaocontrato.contrato.numero} - ${execucaocontrato.contrato.objeto}|"></td>
+							<td>[[${{execucaocontrato.dataExecucao}}]]</td>
+							
+							<td class="text-center">
+								<a target="_blank" th:href="@{|/relatorios/execucaocontrato/${execucaocontrato.codigo}|}" data-toggle="tooltip" title="IMPRIMIR EXECUÇÃO DE CONTRATO" data-position="top">
+									<i class="fas fa-file-pdf"></i>
+								</a>
+							</td>
 							
 							<td class="text-center">
 								<div th:if="${#strings.contains(#authentication.principal.authorities, 'ADMINISTRADOR')}">

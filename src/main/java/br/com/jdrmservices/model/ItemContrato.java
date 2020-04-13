@@ -3,10 +3,12 @@ package br.com.jdrmservices.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,7 +40,7 @@ public class ItemContrato implements Serializable {
 	@Column(name = "valor_unitario")
 	private BigDecimal valorUnitario = BigDecimal.ZERO;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private Contrato contrato;
 
 	public BigDecimal getValorTotal() {

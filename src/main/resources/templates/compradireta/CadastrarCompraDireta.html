@@ -18,19 +18,19 @@
 	<section class="container" layout:fragment="conteudo">
 
 		<h1 class="text-center" th:if="${compraDireta.novo}">Cadastrar Compra Direta</h1>
-		<h1 class="text-center" th:unless="${compraDireta.novo}" th:text="|Edição de ${compraDireta.nome}|">Editar Compra Direta</h1>
+		<h1 class="text-center" th:unless="${compraDireta.novo}" th:text="|Edição de ${compraDireta.numero}|">Editar Compra Direta</h1>
 		
 		<hr />
 
 		<div aria-label="breadcrumb">
 			<ol class="breadcrumb">
 		    	<li class="breadcrumb-item"><a th:href="@{/}">Dashboard</a></li>
-		    	<li class="breadcrumb-item"><a th:href="@{/compradiretas}">Compra Direta</a></li>
+		    	<li class="breadcrumb-item"><a th:href="@{/comprasdiretas}">Compra Direta</a></li>
 		    	<li class="breadcrumb-item active" aria-current="page">Novo</li>
 			</ol>
 		</div>
 		
-		<form method="POST" class="input-form" th:object="${compraDireta}" th:action="@{/compradiretas}">	
+		<form method="POST" class="input-form" th:object="${compraDireta}" th:action="@{/comprasdiretas}">	
 
 			<input type="hidden" th:field="*{codigo}" />	
 			
@@ -139,23 +139,27 @@
 												<thead>
 													<tr>
 														<th style="width: 25%;">Especificação do item</th>
-														<th>Unidade</th>
-														<th>Qtde</th>
-														<th>Vl. Unit.</th>
-														<th>Total</th>
+														<th class="text-center">Unidade</th>
+														<th class="text-center">Qtde</th>
+														<th class="text-center">Vl. Unit.</th>
+														<th class="text-center">Total</th>
 														<th style="width: 5%;" class="text-center"><i class="fas fa-trash-alt text-secondary"></i></th>
 													</tr>
 												</thead>
 												
-												<tbody>
-													<!--<tr>
-														<td>ESPECIFICAÇÃO</td>
-														<td>UNIDADE</td>
-														<td>QUANTIDADE</td>
-														<td>VALOR UNITÁRIO</td>
-														<td>VALOR TOTAL</td>
-														<td class="text-center"><i class="fas fa-trash-alt text-danger"></i></td>
-													</tr>-->
+												<tbody id="itensComprasDiretas">
+													<tr th:each="item : ${itens}" th:unless="${#lists.isEmpty(itens)}">
+														<td>[[${item.especificacao}]]</td>
+														<td class="text-center">[[${item.unidadeMedida}]]</td>
+														<td class="text-center">[[${item.quantidade}]]</td>
+														<td class="text-center">R$ [[${{item.valorUnitario}}]]</td>
+														<td class="text-center">R$ [[${{item.valorTotal}}]]</td>
+														<td class="text-center">
+															<a href="javascript:;" id="btnRemover" th:data-index="${itemStat.count}">
+																<i class="fas fa-trash-alt text-danger"></i>
+															</a>
+														</td>
+													</tr>
 													
 													<tr th:if="${#lists.isEmpty(itens)}">
 														<td colspan="7" class="text-center">Nenhum item adicionado!</td>
@@ -181,5 +185,13 @@
 			</div>
 		</form>
 	</section>
+	
+	<!-- JavaScript -->
+  	<th:block layout:fragment="javascripts">
+  	<script th:src="@{/vendor/mask/jquery-maskmoney.js}"></script>
+  	<script th:src="@{/vendor/mask/jquery.mask.min.js}"></script>
+  	<script th:src="@{/js/pdv.mascaras-campos.js}"></script>
+  	<script th:src="@{/js/pdv.add-itens-compra-direta.js}"></script>
+  	</th:block>
 </body>
 </html>

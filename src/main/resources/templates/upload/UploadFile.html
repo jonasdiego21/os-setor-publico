@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html 
+    lang="pt-br"
+    xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="'Index'"
+    th:with="currentPage='upload'">
+    
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <title></title>
+</head>
+
+<body>
+	<section class="container" layout:fragment="conteudo">
+
+		<h1 class="text-center">Importar itens para o contrato</h1>
+		
+		<form method="POST" class="input-form" enctype="multipart/form-data" th:action="@{/upload}">	
+			
+			<div class="row">
+				<div class="form-group col-sm-12">
+					<label class="form-control-label" for="file"><span class="text-danger">*</span>Escola o arquivo com os itens: </label>
+					<input type="file" name="files[]" class="form-control" id="file" />
+				</div>
+			</div>		
+			
+			<hr />
+			
+			<div class="row mb-3">
+				<div class="col-sm-12 text-right">
+					<a th:href="@{/}" class="btn btn-danger"><i class="fas fa-ban"></i> Cancelar</a>
+					<button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Enviar</button>
+				</div>
+			</div>
+		</form>
+	</section>
+</body>
+</html>

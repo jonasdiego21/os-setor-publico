@@ -26,12 +26,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.jdrmservices.exception.GlobalException;
 import br.com.jdrmservices.model.CompraDireta;
+import br.com.jdrmservices.model.ItemCompraDireta;
 import br.com.jdrmservices.model.enumeration.UnidadeMedida;
 import br.com.jdrmservices.repository.ComprasDiretas;
 import br.com.jdrmservices.repository.Fornecedores;
 import br.com.jdrmservices.repository.Secretarias;
 import br.com.jdrmservices.repository.filter.CompraDiretaFilter;
 import br.com.jdrmservices.service.CompraDiretaService;
+import br.com.jdrmservices.session.TabelaItensCompraDireta;
 
 @Controller
 @RequestMapping("/comprasdiretas")
@@ -49,12 +51,16 @@ public class ComprasDiretasController {
 	@Autowired
 	private Fornecedores fornecedores;
 	
+	@Autowired
+	private TabelaItensCompraDireta tabelaItensCompraDireta;
+	
 	@GetMapping("/novo")
 	public ModelAndView novo(CompraDireta compraDireta) {
 		ModelAndView mv = new ModelAndView(VIEW_COMPRA_DIRETA_NOVO);
 		mv.addObject("comprasdiretas", comprasDiretas.findAll());
 		mv.addObject("secretarias", secretarias.findAllByOrderByNomeAsc());
 		mv.addObject("fornecedores", fornecedores.findAllByOrderByNomeAsc());
+		mv.addObject("itens", tabelaItensCompraDireta.getItens());
 		mv.addObject("medidas", UnidadeMedida.values());
 		mv.addObject(compraDireta);
 		
@@ -67,6 +73,12 @@ public class ComprasDiretasController {
 		if(result.hasErrors()) {
 			return novo(compraDireta);
 		}
+		
+		for(ItemCompraDireta item : tabelaItensCompraDireta.getItens()) {
+			item.setCompraDireta(compraDireta);
+		}
+		
+		compraDireta.adicionarItens(tabelaItensCompraDireta.getItens());
 		
 		try {
 			compraDiretaService.cadastrar(compraDireta);
@@ -83,6 +95,10 @@ public class ComprasDiretasController {
 	@GetMapping("/{codigo}")
 	public ModelAndView editar(@PathVariable("codigo") CompraDireta compraDireta) {	
 		ModelAndView mv = novo(compraDireta);
+		
+		tabelaItensCompraDireta.adicionarItens(compraDireta.getItens());
+		
+		mv.addObject("itens", tabelaItensCompraDireta.getItens());
 		mv.addObject(compraDireta);
 		
 		return mv;
@@ -105,6 +121,7 @@ public class ComprasDiretasController {
 		mv.addObject("comprasdiretas", comprasDiretas.findAll());
 		mv.addObject("secretarias", secretarias.findAllByOrderByNomeAsc());
 		mv.addObject("fornecedores", fornecedores.findAllByOrderByNomeAsc());
+		mv.addObject("itens", tabelaItensCompraDireta.getItens());
 		mv.addObject("medidas", UnidadeMedida.values());
 		
 		Page<CompraDireta> pagina = comprasDiretas.filtrar(compraDiretaFilter, pageable);

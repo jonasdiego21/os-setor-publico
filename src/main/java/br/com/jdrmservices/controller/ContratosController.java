@@ -26,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.jdrmservices.exception.GlobalException;
 import br.com.jdrmservices.model.Contrato;
+import br.com.jdrmservices.model.ItemContrato;
 import br.com.jdrmservices.model.enumeration.TipoMaterial;
 import br.com.jdrmservices.model.enumeration.UnidadeMedida;
 import br.com.jdrmservices.repository.Contratos;
@@ -33,6 +34,7 @@ import br.com.jdrmservices.repository.Fornecedores;
 import br.com.jdrmservices.repository.Secretarias;
 import br.com.jdrmservices.repository.filter.ContratoFilter;
 import br.com.jdrmservices.service.ContratoService;
+import br.com.jdrmservices.session.TabelaItensContrato;
 
 @RestController
 @RequestMapping("/contratos")
@@ -50,6 +52,9 @@ public class ContratosController {
 	@Autowired
 	private Fornecedores fornecedores;
 	
+	@Autowired
+	private TabelaItensContrato tabelaItensContrato;
+	
 	@GetMapping("/novo")
 	public ModelAndView novo(Contrato contrato) {
 		ModelAndView mv = new ModelAndView(VIEW_CONTRATO_NOVO);
@@ -57,6 +62,7 @@ public class ContratosController {
 		mv.addObject("secretarias", secretarias.findAllByOrderByNomeAsc());
 		mv.addObject("fornecedores", fornecedores.findAllByOrderByNomeAsc());
 		mv.addObject("materiais", TipoMaterial.values());
+		mv.addObject("itens", tabelaItensContrato.getItens());
 		mv.addObject("medidas", UnidadeMedida.values());
 		
 		mv.addObject(contrato);
@@ -70,6 +76,12 @@ public class ContratosController {
 		if(result.hasErrors()) {
 			return novo(contrato);
 		}
+		
+		for(ItemContrato item : tabelaItensContrato.getItens()) {
+			item.setContrato(contrato);
+		}
+		
+		contrato.adicionarItens(tabelaItensContrato.getItens());
 		
 		try {
 			contratoService.cadastrar(contrato);
@@ -86,6 +98,10 @@ public class ContratosController {
 	@GetMapping("/{codigo}")
 	public ModelAndView editar(@PathVariable("codigo") Contrato contrato) {	
 		ModelAndView mv = novo(contrato);
+		
+		tabelaItensContrato.adicionarItens(contrato.getItens());
+		
+		mv.addObject("itens", tabelaItensContrato.getItens());
 		mv.addObject(contrato);
 		
 		return mv;
@@ -109,11 +125,23 @@ public class ContratosController {
 		mv.addObject("secretarias", secretarias.findAllByOrderByNomeAsc());
 		mv.addObject("fornecedores", fornecedores.findAllByOrderByNomeAsc());
 		mv.addObject("materiais", TipoMaterial.values());
+		mv.addObject("itens", tabelaItensContrato.getItens());
 		mv.addObject("medidas", TipoMaterial.values());
 		
 		Page<Contrato> pagina = contratos.filtrar(contratoFilter, pageable);
 		mv.addObject("pagina", pagina);
 		
 		return mv;
+	}
+	
+	@GetMapping("/contratosPorFornecedor/{codigo}")
+	private @ResponseBody ResponseEntity<?> contratosPorFornecedor(@PathVariable("codigo") Long codigo) {
+		try {
+			Thread.sleep(500);
+		} catch (Exception e) {
+			
+		}
+		
+		return contratos.findByFornecedor(codigo);
 	}
 }

@@ -1,5 +1,7 @@
 package br.com.jdrmservices.repository.helper.contrato;
 
+import java.math.BigDecimal;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -56,8 +58,40 @@ public class ContratosImpl implements ContratosQueries {
 	
 	private void adicionarFiltro(ContratoFilter filtro, Criteria criteria) {
 		if(filtro != null) {
+			if(filtro.getDataInicio() != null) {
+				criteria.add(Restrictions.ge("dataInicio", filtro.getDataInicio()));
+			}
+			
+			if(filtro.getDataTermino() != null) {
+				criteria.add(Restrictions.le("dataTermino", filtro.getDataTermino()));
+			}
+			
 			if(!StringUtils.isEmpty(filtro.getNumero())) {
-				criteria.add(Restrictions.ilike("numero", filtro.getNumero(), MatchMode.ANYWHERE));
+				criteria.add(Restrictions.ilike("numero", filtro.getNumero(), MatchMode.EXACT));
+			}
+			
+			if(!StringUtils.isEmpty(filtro.getNumeroLicitacao())) {
+				criteria.add(Restrictions.ilike("numeroLicitacao", filtro.getNumeroLicitacao(), MatchMode.EXACT));
+			}
+			
+			if(!StringUtils.isEmpty(filtro.getObjeto())) {
+				criteria.add(Restrictions.ilike("objeto", filtro.getObjeto(), MatchMode.ANYWHERE));
+			}
+			
+			if(filtro.getTipoMaterial() != null) {
+				criteria.add(Restrictions.eq("tipoMaterial", filtro.getTipoMaterial()));
+			}
+			
+			if(filtro.getValorContrato() != null) {
+				criteria.add(Restrictions.eq("valorContrato", filtro.getValorContrato()));
+			}
+			
+			if(filtro.getFornecedor() != null) {
+				criteria.add(Restrictions.eq("fornecedor", filtro.getFornecedor()));
+			}
+			
+			if(filtro.getSecretaria() != null) {
+				criteria.add(Restrictions.eq("secretaria", filtro.getSecretaria()));
 			}
 		}
 	}

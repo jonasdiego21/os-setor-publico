@@ -2,7 +2,9 @@ package br.com.jdrmservices.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -35,10 +38,17 @@ public class CompraDireta implements Serializable {
 	private Secretaria secretaria;
 	
 	@Column(name = "data_ordem")
-	private LocalDate dataOrdem;
-	
+	private LocalDate dataOrdem = LocalDate.now();
+
 	@NotBlank(message = "O objeto da compra é obrigatório")
 	private String objeto;
+	
+	@OneToMany(mappedBy = "compraDireta", cascade = CascadeType.ALL)
+	private List<ItemCompraDireta> itens;
+	
+	public void adicionarItens(List<ItemCompraDireta> itens) {
+		this.itens = itens;	
+	}
 	
 	public boolean isNovo() {
 		return codigo == null;
@@ -90,6 +100,14 @@ public class CompraDireta implements Serializable {
 
 	public void setObjeto(String objeto) {
 		this.objeto = objeto;
+	}
+	
+	public List<ItemCompraDireta> getItens() {
+		return itens;
+	}
+
+	public void setItens(List<ItemCompraDireta> itens) {
+		this.itens = itens;
 	}
 
 	@Override

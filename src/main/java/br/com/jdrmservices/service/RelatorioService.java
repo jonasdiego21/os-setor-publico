@@ -1,5 +1,6 @@
 package br.com.jdrmservices.service; 
 
+import java.io.File;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -22,12 +23,24 @@ public class RelatorioService {
 	@Autowired
 	private DataSource dataSource;
 	
-	public byte[] gerarOrdemServicoEetiqueta(Long codigo) throws Exception {	
+	public byte[] gerarCompraDireta(Long codigo) throws Exception {	
+		Map<String, Object> parametros = new HashMap<>();	
+		
+		File img = new File("src/main/resources/relatorios/lotipo_pmsq.png");
+		
+		parametros.put("codigo_compra_direta", codigo);
+		parametros.put("path_image", img.toString());
+		
+		return exportandoPdf(parametros, "/relatorios/relatorio_compra_direta.jasper");
+	}
+	
+	public byte[] gerarExecucaoContrato(Long codigo) throws Exception {	
 		Map<String, Object> parametros = new HashMap<>();		
 		
-		parametros.put("codigo", codigo);
+		parametros.put("execucao_contrato_codigo", codigo);
+		parametros.put("path_image", "/relatorios/lotipo_pmsq.png");
 		
-		return exportandoPdf(parametros, "/relatorios/relatorio_os.jasper");
+		return exportandoPdf(parametros, "/relatorios/relatorio_execucao_contrato.jasper");
 	}
 	
 	private byte[] exportandoPdf(Map<String, Object> parametros, String caminhoRelatorio) throws JRException, SQLException {

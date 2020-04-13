@@ -2,6 +2,7 @@ package br.com.jdrmservices.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,11 +30,11 @@ public class ItensCompraDiretaController {
 		return mv;
 	}
 	
-	@DeleteMapping
-	public ModelAndView removerItem(ItemCompraDireta itemCompraDireta) {
+	@DeleteMapping("/{index}")
+	public ModelAndView removerItem(@PathVariable int index) {
 		ModelAndView mv = new ModelAndView(VIEW_ITEM_COMPRA_DIRETA);
 		
-		tabelaItensCompraDireta.removerItem(itemCompraDireta);
+		tabelaItensCompraDireta.removerItem(index);
 		mv.addObject("itens", tabelaItensCompraDireta.getItens());
 		
 		return mv;

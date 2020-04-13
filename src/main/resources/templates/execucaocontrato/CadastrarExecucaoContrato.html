@@ -18,7 +18,7 @@
 	<section class="container" layout:fragment="conteudo">
 
 		<h1 class="text-center" th:if="${execucaoContrato.novo}">Execução de Contrato</h1>
-		<h1 class="text-center" th:unless="${execucaoContrato.novo}" th:text="|Edição de ${execucaoContrato.nome}|">Editar Execução de Contrato</h1>
+		<h1 class="text-center" th:unless="${execucaoContrato.novo}" th:text="|Edição de ${execucaoContrato.contrato.numero}|">Editar Execução de Contrato</h1>
 		
 		<hr />
 
@@ -41,9 +41,43 @@
 			<th:block th:include="messages/SuccessMessage"></th:block>
 			
 			<div class="row">
-				<div class="form-group col-sm-12">
+				<div class="form-group col-sm-2 date">
+					<label class="form-control-label" for="dataExecucao"><span class="text-danger">*</span>Data da Execução</label>
+					<input type="text" th:field="*{dataExecucao}" class="form-control datepicker data-mask" id="dataExecucao" th:errorclass="is-invalid" autocomplete="off">
+				</div>
+				
+				<div class="form-group col-sm-3">
 					<label class="form-control-label" for="fornecedor"><span class="text-danger">*</span>Fornecedor</label>
-					<input type="text" th:field="*{fornecedor}" class="form-control" id="fornecedor" th:errorclass="is-invalid" autocomplete="off">
+					
+					<select th:field="*{fornecedor}" class="form-control" id="fornecedor" th:errorclass="is-invalid">
+						<option value="">Selecione o fornecedor</option>
+						<option th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.codigo}" th:text="${#strings.toUpperCase(fornecedor.nome)}"></option>
+					</select>
+				</div>
+				
+				<div class="form-group col-sm-3">
+					<label class="form-control-label" for="contrato"><span class="text-danger">*</span>Contrato</label>
+					
+					<select th:field="*{contrato}" class="form-control" id="contrato" th:errorclass="is-invalid">
+						<option value="">Selecione o contrato</option>
+						<option th:each="contrato : ${contratos}" th:value="${contrato.codigo}" th:text="|${contrato.numero} - ${#strings.toUpperCase(contrato.objeto)}|"></option>
+					</select>
+				</div>
+				
+				<div class="form-group col-sm-4">
+					<label class="form-control-label" for="dotacao"><span class="text-danger">*</span>Dotação</label>
+					
+					<select th:field="*{dotacao}" class="form-control" id="dotacao" th:errorclass="is-invalid">
+						<option value="">Selecione a dotação</option>
+						<option th:each="dotacao : ${dotacoes}" th:value="${dotacao.codigo}" th:text="|${dotacao.numero} - ${#strings.toUpperCase(dotacao.dotacao)}|"></option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="row">				
+				<div class="form-group col-sm-12">
+					<label class="form-control-label" for="observacao">Observações</label>
+					<textarea th:field="*{observacao}" rows="5" cols="5" class="form-control" id="observacao" th:errorclass="is-invalid"></textarea>
 				</div>
 			</div>		
 			

@@ -10,6 +10,13 @@ Pdv.CalcularDias = (function() {
 	
 	CalcularDias.prototype.start = function() {
 		$(this.prazo).on('focus', calcularIntervalorEmDias.bind(this));
+
+		if(this.dataInicio.val() != '' && this.dataTermino.val() != ''
+			|| this.dataInicio.val() != null && this.dataTermino.val() != null
+			|| this.dataInicio.val() != undefined && this.dataTermino.val() != undefined) {
+			
+			calcularIntervalorEmDias.call(this);
+		}
 	}
 	
 	function calcularIntervalorEmDias() {	

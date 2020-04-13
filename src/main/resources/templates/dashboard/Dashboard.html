@@ -15,7 +15,72 @@
 
 <body>
 	<div class="container" layout:fragment="conteudo">
+		<h1>Dashboard</h1>
+		<hr />
 		
+		<div class="row mb-2">
+			<div class="col-sm-4">
+				<div class="card">
+					<div class="card-body">
+						<h1 class="card-title text-center">[[${usuarios}]]</h1>
+						<p class="card-text text-center">Total de usuários cadastrados</p>
+						<a th:href="@{/usuarios}" class="btn btn-primary btn-block">Lista de usuários</a>
+					</div>
+				</div>
+			</div>	
+			
+			<div class="col-sm-4">
+				<div class="card">
+					<div class="card-body">
+						<h1 class="card-title text-center">[[${secretarias}]]</h1>
+						<p class="card-text text-center">Total de secretarias cadastradas</p>
+						<a th:href="@{/secretarias}" class="btn btn-primary btn-block">Lista de secretarias</a>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-sm-4">
+				<div class="card">
+					<div class="card-body">
+						<h1 class="card-title text-center">[[${contratos}]]</h1>
+						<p class="card-text text-center">Total de contratos cadastrados</p>
+						<a th:href="@{/contratos}" class="btn btn-primary btn-block">Lista de contratos</a>
+					</div>
+				</div>
+			</div>	
+		</div>
+		
+		<div class="row mb-2">
+			<div class="col-sm-4">
+				<div class="card">
+					<div class="card-body">
+						<h1 class="card-title text-center">[[${fornecedores}]]</h1>
+						<p class="card-text text-center">Total de fornecedores cadastrados</p>
+						<a th:href="@{/usuarios}" class="btn btn-primary btn-block">Lista de fornecedores</a>
+					</div>
+				</div>
+			</div>	
+			
+			<div class="col-sm-4">
+				<div class="card">
+					<div class="card-body">
+						<h1 class="card-title text-center">[[${comprasdiretas}]]</h1>
+						<p class="card-text text-center">Total de compras diretas cadastradas</p>
+						<a th:href="@{/usuarios}" class="btn btn-primary btn-block">Lista de compras diretas</a>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-sm-4">
+				<div class="card">
+					<div class="card-body">
+						<h1 class="card-title text-center">[[${execucaocontratos}]]</h1>
+						<p class="card-text text-center">Total de execução de contratos cadastrados</p>
+						<a th:href="@{/usuarios}" class="btn btn-primary btn-block">Lista de execução de contratos</a>
+					</div>
+				</div>
+			</div>	
+		</div>
 	</div>
 	
   	<!-- JavaScript -->

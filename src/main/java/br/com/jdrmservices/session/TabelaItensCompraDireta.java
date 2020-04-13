@@ -13,29 +13,33 @@ import br.com.jdrmservices.model.ItemCompraDireta;
 @SessionScope
 public class TabelaItensCompraDireta {
 
-private List<ItemCompraDireta> itensCompraDireta = new ArrayList<>();
+	private List<ItemCompraDireta> itensCompraDireta = new ArrayList<>();
 	
 	public BigDecimal getValorTotal() {
-		return itensCompraDireta.stream()
+		return this.itensCompraDireta.stream()
 				.map(ItemCompraDireta::getValorTotal)
 				.reduce(BigDecimal::add)
 				.orElse(BigDecimal.ZERO);
 	}
 	
+	public void adicionarItens(List<ItemCompraDireta> itens) {
+		this.itensCompraDireta = itens;
+	}
+	
 	public void adicionarItem(ItemCompraDireta itemCompraDireta) {
-		itensCompraDireta.add(itemCompraDireta);
+		this.itensCompraDireta.add(itemCompraDireta);
 	}
 	
 	public void removerItem(int index) {
-		itensCompraDireta.remove(index);
+		this.itensCompraDireta.remove(index);
 	}
 	
 	public int getTotal() {
-		return itensCompraDireta.size();
+		return this.itensCompraDireta.size();
 	}
 
 	public List<ItemCompraDireta> getItens() {
-		return itensCompraDireta;
+		return this.itensCompraDireta;
 	}
 	
 }

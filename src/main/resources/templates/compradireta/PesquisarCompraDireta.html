@@ -22,22 +22,53 @@
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a th:href="@{/}">Dashboard</a></li>
 				<li class="breadcrumb-item active" aria-current="page">Compra Diretas</li>
-				<li class="breadcrumb-item"><a th:href="@{/compradiretas/novo}">Novo</a></li>
+				<li class="breadcrumb-item"><a th:href="@{/comprasdiretas/novo}">Novo</a></li>
 			</ol>
 		</div>
 
-		<form class="row" method="GET" th:object="${compraDiretaFilter}" th:action="@{/compradiretas}">
-			<div class="col-sm-8"></div>	
+		<form method="GET" th:object="${compraDiretaFilter}" th:action="@{/comprasdiretas}">
+			<div class="row">
+				<div class="form-group col-sm-3">
+					<label class="form-control-label" for="numero"><span class="text-danger">*</span>Numero</label>
+					<input th:field="*{numero}" type="text" class="form-control" id="numero" th:errorclass="is-invalid" autocomplete="off">
+				</div>
+				
+				<div class="form-group col-sm-3 date">
+					<label class="form-control-label" for="dataOrdem"><span class="text-danger">*</span>Data da Ordem</label>
+					<input th:field="*{dataOrdem}" type="text" class="form-control datepicker data-mask" id="dataOrdem" th:errorclass="is-invalid" autocomplete="off">
+				</div>
+
+				<div class="form-group col-sm-3">
+					<label class="form-control-label" for="secretaria"><span class="text-danger">*</span>Secretaria</label>
 					
-			<div class="col-sm-4">
-				<div class="input-group mb-3">						 
-					<input id="numero" th:field="*{numero}" type="text" class="form-control" placeholder="Pesquisar...">
-					 
-					<div class="input-group-append">
-						<button id="btnBuscar" class="btn btn-primary" type="submit">
-							<i class="fas fa-search"></i>
-						</button> 
-					</div>
+					<select th:field="*{secretaria}" class="form-control" id="secretaria" th:errorclass="is-invalid">
+						<option value="">Selecione a secretaria</option>
+						<option th:each="secretaria : ${secretarias}" th:value="${secretaria.codigo}" th:text="${secretaria.nome}"></option>
+					</select>
+				</div>
+				
+				<div class="form-group col-sm-3">
+					<label class="form-control-label" for="fornecedor"><span class="text-danger">*</span>Fornecedor</label>
+					
+					<select th:field="*{fornecedor}" class="form-control" id="fornecedor" th:errorclass="is-invalid">
+						<option value="">Selecione o fornecedor</option>
+						<option th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.codigo}" th:text="${fornecedor.nome}"></option>
+					</select>
+				</div>
+			</div>	
+			
+			<div class="row">				
+				<div class="form-group col-sm-12">
+					<label class="form-control-label" for="objeto"><span class="text-danger">*</span>Objeto do contrato (Especificação)</label>
+					<textarea th:field="*{objeto}" rows="5" cols="5" class="form-control" id="objeto" th:errorclass="is-invalid"></textarea>
+				</div>
+			</div>
+			
+			<hr />
+			
+			<div class="row mb-3">
+				<div class="col-sm-12 text-right">
+					<button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Pesquisar</button>
 				</div>
 			</div>
 		</form>
@@ -47,34 +78,48 @@
 				<table class="table table-hover thead-light table-bordered table-striped">
 					<thead class="thead-dark">
 						<tr>
-						<th style="width: 10%;">Código</th>
+						<th class="text-center">Número</th>
+						<th class="text-center">Data ordem</th>
+						<th>Objeto</th>
 						<th>Fornecedor</th>
-						<th style="width: 10%;" colspan="2" class="text-center">Ações</th>
+						<th>Secretaria</th>
+						<th style="width: 10%;" colspan="3" class="text-center">Ações</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="compradireta : ${pagina.content}">
-							<td class="text-center" th:text="${compradireta.codigo}"></td>
-							<td th:text="${compradireta.nome}"></td>
+							<td class="text-center">
+								<a th:href="@{|/comprasdiretas/${compradireta.codigo}|}">#[[${compradireta.numero}]]</a>
+							</td>
+							<td class="text-center">[[${{compradireta.dataOrdem}}]]</td>
+							<td th:text="${compradireta.objeto}"></td>
+							<td th:text="${compradireta.fornecedor.nome}"></td>
+							<td th:text="${compradireta.secretaria.nome}"></td>
+							
+							<td class="text-center">
+								<a target="_blank" th:href="@{|/relatorios/compradireta/${compradireta.codigo}|}" data-toggle="tooltip" title="IMPRIMIR ORDEM DE COMPRA" data-position="top">
+									<i class="fas fa-file-pdf"></i>
+								</a>
+							</td>
 							
 							<td class="text-center">
 								<div th:if="${#strings.contains(#authentication.principal.authorities, 'ADMINISTRADOR')}">
-									<a th:href="@{|/compradiretas/${compradireta.codigo}|}" data-toggle="tooltip" title="EDITAR" data-position="top">
+									<a th:href="@{|/comprasdiretas/${compradireta.codigo}|}" data-toggle="tooltip" title="EDITAR" data-position="top">
 										<i class="fas fa-pencil-alt"></i>
 									</a>
 								</div>
 							</td>
 							<td class="text-center" data-toggle="tooltip" title="EXCLUIR" data-position="top"> 
 								<div th:if="${#strings.contains(#authentication.principal.authorities, 'ADMINISTRADOR')}">
-									<a href="javascript:;" class="js-btn-excluir" th:url="@{|/compradiretas/${compradireta.codigo}|}">
+									<a href="javascript:;" class="js-btn-excluir" th:url="@{|/comprasdiretas/${compradireta.codigo}|}">
 										<i class="fas fa-trash-alt text-danger"></i>
 									</a>
 								</div>
-							</td>
+							</td>							
 						</tr>
 						
 						<tr th:if="${#lists.isEmpty(pagina.content)}">
-							<td colspan="5" class="text-center">Nenhuma informação encontrado!</td>
+							<td colspan="7" class="text-center">Nenhuma informação encontrado!</td>
 						</tr>
 					</tbody>
 				</table>

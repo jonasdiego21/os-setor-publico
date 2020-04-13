@@ -5,15 +5,11 @@ import javax.persistence.PersistenceContext;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import br.com.jdrmservices.model.ExecucaoContrato;
 import br.com.jdrmservices.repository.filter.ExecucaoContratoFilter;
@@ -31,7 +27,7 @@ public class ExecucaoContratosImpl implements ExecucaoContratosQueries {
 		@SuppressWarnings("deprecation")
 		Criteria criteria = manager.unwrap(Session.class).createCriteria(ExecucaoContrato.class);
 		
-		criteria.addOrder(Order.asc("fornecedor"));
+		//criteria.addOrder(Order.asc("fornecedor"));
 		
 		int paginaAtual = pageable.getPageNumber();
 		int totalRegistrosPorPagina = pageable.getPageSize();
@@ -56,9 +52,7 @@ public class ExecucaoContratosImpl implements ExecucaoContratosQueries {
 	
 	private void adicionarFiltro(ExecucaoContratoFilter filtro, Criteria criteria) {
 		if(filtro != null) {
-			if(!StringUtils.isEmpty(filtro.getFornecedor())) {
-				criteria.add(Restrictions.ilike("fornecedor", filtro.getFornecedor(), MatchMode.ANYWHERE));
-			}
+			
 		}
 	}
 }

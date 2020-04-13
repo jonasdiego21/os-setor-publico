@@ -56,8 +56,24 @@ public class ComprasDiretasImpl implements ComprasDiretasQueries {
 	
 	private void adicionarFiltro(CompraDiretaFilter filtro, Criteria criteria) {
 		if(filtro != null) {
+			if(filtro.getDataOrdem() != null) {
+				criteria.add(Restrictions.eq("dataOrdem", filtro.getDataOrdem()));
+			}
+			
 			if(!StringUtils.isEmpty(filtro.getNumero())) {
 				criteria.add(Restrictions.ilike("numero", filtro.getNumero(), MatchMode.ANYWHERE));
+			}
+			
+			if(!StringUtils.isEmpty(filtro.getObjeto())) {
+				criteria.add(Restrictions.ilike("objeto", filtro.getObjeto(), MatchMode.ANYWHERE));
+			}
+			
+			if(filtro.getFornecedor() != null) {
+				criteria.add(Restrictions.eq("fornecedor", filtro.getFornecedor()));
+			}
+			
+			if(filtro.getSecretaria() != null) {
+				criteria.add(Restrictions.eq("secretaria", filtro.getSecretaria()));
 			}
 		}
 	}

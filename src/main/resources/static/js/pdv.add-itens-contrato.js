@@ -74,7 +74,7 @@ Pdv.AddItensContrato = (function() {
 	function removerItem(e) {
 		e.preventDefault();
 		
-		console.log(e.target);
+		console.log(e);
 		
 		/*
 		let retorno = $.ajax({

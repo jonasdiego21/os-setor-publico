@@ -7,6 +7,6 @@ import br.com.jdrmservices.model.Dotacao;
 import br.com.jdrmservices.repository.helper.dotacao.DotacoesQueries;
 
 @Repository
-public interface Dotocoes extends JpaRepository<Dotacao, Long>, DotacoesQueries {
+public interface Dotacoes extends JpaRepository<Dotacao, Long>, DotacoesQueries {
 
 }

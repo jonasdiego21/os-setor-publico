@@ -26,7 +26,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.jdrmservices.exception.GlobalException;
 import br.com.jdrmservices.model.ExecucaoContrato;
+import br.com.jdrmservices.repository.Contratos;
+import br.com.jdrmservices.repository.Dotacoes;
 import br.com.jdrmservices.repository.ExecucaoContratos;
+import br.com.jdrmservices.repository.Fornecedores;
 import br.com.jdrmservices.repository.filter.ExecucaoContratoFilter;
 import br.com.jdrmservices.service.ExecucaoContratoService;
 
@@ -40,10 +43,22 @@ public class ExecucaoContratosController {
 	@Autowired
 	private ExecucaoContratos execucaoContratos;
 	
+	@Autowired
+	private Fornecedores fornecedores;
+	
+	@Autowired
+	private Contratos contratos;
+	
+	@Autowired
+	private Dotacoes dotacoes;
+	
 	@GetMapping("/novo")
 	public ModelAndView novo(ExecucaoContrato execucaoContrato) {
 		ModelAndView mv = new ModelAndView(VIEW_EXECUCAO_CONTRATO_NOVO);
-		mv.addObject("execucaocontratos", execucaoContratos.findAllByOrderByFornecedorAsc());
+		mv.addObject("execucaocontratos", execucaoContratos.findAll());
+		mv.addObject("dotacoes", dotacoes.findAll());
+		mv.addObject("fornecedores", fornecedores.findAllByOrderByNomeAsc());
+		mv.addObject("contratos", contratos.findAll());//trazer contratos por fornecedor
 		mv.addObject(execucaoContrato);
 		
 		return mv;
@@ -88,9 +103,12 @@ public class ExecucaoContratosController {
 	}
 	
 	@GetMapping
-	public ModelAndView pesquisar(ExecucaoContratoFilter execucaoContratoFilter, BindingResult result, @PageableDefault(size = 10) Pageable pageable) {
+	public ModelAndView pesquisar(ExecucaoContratoFilter execucaoContratoFilter, BindingResult result, @PageableDefault(size = 50) Pageable pageable) {
 		ModelAndView mv = new ModelAndView(VIEW_PESQUISAR_EXECUCAO_CONTRATO);
-		mv.addObject("execucaocontratos", execucaoContratos.findAllByOrderByFornecedorAsc());
+		mv.addObject("execucaocontratos", execucaoContratos.findAll());
+		mv.addObject("dotacoes", dotacoes.findAll());
+		mv.addObject("fornecedores", fornecedores.findAllByOrderByNomeAsc());
+		mv.addObject("contratos", contratos.findAll());//trazer contratos por fornecedor
 		
 		Page<ExecucaoContrato> pagina = execucaoContratos.filtrar(execucaoContratoFilter, pageable);
 		mv.addObject("pagina", pagina);

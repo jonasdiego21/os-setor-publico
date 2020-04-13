@@ -4,13 +4,18 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
@@ -33,11 +38,11 @@ public class Contrato implements Serializable {
 	
 	@Column(name = "data_inicio")
 	@NotNull(message = "A data inicio é obgratória")
-	private LocalDate dataInicio;
+	private LocalDate dataInicio = LocalDate.now();
 
 	@Column(name = "data_termino")
 	@NotNull(message = "A data término é obgratória")
-	private LocalDate dataTermino;
+	private LocalDate dataTermino = LocalDate.now().plusDays(30);
 
 	@Transient
 	private String prazo;
@@ -53,6 +58,7 @@ public class Contrato implements Serializable {
 	@NotNull(message = "O fornecedor é obgratório")
 	private Fornecedor fornecedor;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name = "tipo_material")
 	private TipoMaterial tipoMaterial;
 	
@@ -61,6 +67,13 @@ public class Contrato implements Serializable {
 	
 	@Column(name = "valor_contrato")
 	private BigDecimal valorContrato;
+	
+	@OneToMany(mappedBy = "contrato", cascade = CascadeType.ALL)
+	private List<ItemContrato> itens;
+	
+	public void adicionarItens(List<ItemContrato> itens) {
+		this.itens = itens;
+	}
 
 	public boolean isNovo() {
 		return codigo == null;
@@ -154,6 +167,14 @@ public class Contrato implements Serializable {
 		this.valorContrato = valorContrato;
 	}
 	
+	public List<ItemContrato> getItens() {
+		return itens;
+	}
+
+	public void setItens(List<ItemContrato> itens) {
+		this.itens = itens;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

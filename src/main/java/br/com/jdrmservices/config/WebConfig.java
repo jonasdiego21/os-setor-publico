@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.format.datetime.DateFormatter;
+import org.springframework.format.datetime.DateFormatterRegistrar;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.number.NumberStyleFormatter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -17,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
 		NumberStyleFormatter bigDecimalFormatter = new NumberStyleFormatter("#,##0.00");
 		registry.addFormatterForFieldType(BigDecimal.class, bigDecimalFormatter);
 		
-		NumberStyleFormatter integerFormatter = new NumberStyleFormatter("#,##0");
+		NumberStyleFormatter integerFormatter = new NumberStyleFormatter("#,##0.00");
 		registry.addFormatterForFieldType(BigDecimal.class, integerFormatter);
 		
 		DateTimeFormatterRegistrar dateTimeFormatterRegistrar = new DateTimeFormatterRegistrar();
@@ -25,8 +27,8 @@ public class WebConfig implements WebMvcConfigurer {
 		dateTimeFormatterRegistrar.setDateFormatter(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		dateTimeFormatterRegistrar.registerFormatters(registry);
 		
-		/*DateFormatterRegistrar dateFormatterRegistrar = new DateFormatterRegistrar();
+		DateFormatterRegistrar dateFormatterRegistrar = new DateFormatterRegistrar();
 		dateFormatterRegistrar.setFormatter(new DateFormatter("dd/MM/yyyy"));
-		dateFormatterRegistrar.registerFormatters(registry);*/
+		dateFormatterRegistrar.registerFormatters(registry);
 	}
 }

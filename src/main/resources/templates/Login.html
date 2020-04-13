@@ -22,7 +22,7 @@
 	<body class="bg-dark">
 		<div class="container">
 			<div class="wrapper">	
-				<form class="form-signin" method="post" th:action="@{/login}"> 			
+				<form class="form-signin" method="post" th:action="@{/login}" enctype="utf8" onLoad="grecaptcha.execute()"> 			
 					<div class="row">
 						<div class="col-sm-12 text-center mb-2 mt-2">
 							<img class="img-fluid" th:src="@{/images/login_logo.svg}" alt="Logo" width="100px" />
@@ -54,10 +54,12 @@
 						
 						<input type="password" class="form-control" name="password" placeholder="Sua senha..." required="required" aria-describedby="btnGroupAddon"/>
 					</div>
-					
-					<button class="btn btn-lg btn-primary btn-block" type="submit">
+
+					<button id="btnEntrar" class="btn btn-lg btn-primary btn-block" type="submit">
 						<i class="fas fa-check"></i> Entrar
-					</button>   
+					</button> 
+					
+					<!--<div class="g-recaptcha ml-1 mt-2" data-sitekey="6LdHgN0UAAAAAJZ7YxhmDYZkIIH6v8PUZHvJOQz1"></div>-->
 				</form>
 				
 				<p class="text-center text-light mt-2">
@@ -70,7 +72,9 @@
 		
 		<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
 		<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
-		<script th:src="@{/js/pdv.global-loading.js}"></script>
+		<script th:src="@{/js/pdv.global-loading.js}"></script>	
+		<script th:src="@{https://www.google.com/recaptcha/api.js?render=6LdHgN0UAAAAAJZ7YxhmDYZkIIH6v8PUZHvJOQz1}"></script>
+
 		<!--<script>
 		$(window).ready(function() {
 			$('#preloader').preloader({

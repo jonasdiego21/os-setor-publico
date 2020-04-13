@@ -16,25 +16,29 @@ public class TabelaItensContrato {
 	private List<ItemContrato> itensContrato = new ArrayList<>();
 	
 	public BigDecimal getValorTotal() {
-		return itensContrato.stream()
+		return this.itensContrato.stream()
 				.map(ItemContrato::getValorTotal)
 				.reduce(BigDecimal::add)
 				.orElse(BigDecimal.ZERO);
 	}
 	
+	public void adicionarItens(List<ItemContrato> itens) {
+		this.itensContrato = itens;
+	}
+	
 	public void adicionarItem(ItemContrato item) {
-		itensContrato.add(item);
+		this.itensContrato.add(item);
 	}
 	
 	public void removerItem(int index) {
-		itensContrato.remove(index);
+		this.itensContrato.remove(index);
 	}
 	
 	public int getTotal() {
-		return itensContrato.size();
+		return this.itensContrato.size();
 	}
 
 	public List<ItemContrato> getItens() {
-		return itensContrato;
+		return this.itensContrato;
 	}
 }
